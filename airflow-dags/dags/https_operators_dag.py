@@ -5,7 +5,7 @@ from airflow.utils.dates import days_ago
 
 # Define default arguments for the DAG
 default_args = {
-    'owner': 'your_name',
+    'owner': 'ndq',
     'start_date': days_ago(1),
     'retries': 1,
 }
