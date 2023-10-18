@@ -39,7 +39,6 @@ http_operator = SimpleHttpOperator(
     endpoint='/schedule.json',
     data='project=bookscraper&spider=bookspider',  # Use a URL-encoded string for data
     headers={"Content-Type": "application/x-www-form-urlencoded"},
-    xcom_push=True,
     dag=dag,
 )
 
