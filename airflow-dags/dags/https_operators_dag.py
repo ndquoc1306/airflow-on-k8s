@@ -2,20 +2,19 @@ from airflow import DAG
 from airflow.providers.http.sensors.http import HttpSensor
 from airflow.providers.http.operators.http import SimpleHttpOperator
 from airflow.utils.dates import days_ago
-from datetime import datetime
 
 # Define default arguments for the DAG
 default_args = {
-    'owner': 'your_name',
+    'owner': 'ndq',
     'start_date': days_ago(1),
     'retries': 1,
 }
 
 # Define the DAG
 dag = DAG(
-    'my_http_request_dag',
+    dag_id='my_http_request_dag',
     default_args=default_args,
-    schedule_interval=None,  # Set your desired schedule interval
+    schedule_interval='@daily',  # Set your desired schedule interval
     catchup=False,
 )
 
@@ -38,17 +37,10 @@ http_operator = SimpleHttpOperator(
     method='POST',
     http_conn_id='http_default',  # Create an HTTP connection in Airflow with the base URL
     endpoint='/schedule.json',
-    data={'project': 'bookscraper', 'spider': 'bookspider'},
+    data='project=bookscraper&spider=bookspider',  # Use a URL-encoded string for data
     headers={"Content-Type": "application/x-www-form-urlencoded"},
-    xcom_push=True,
     dag=dag,
 )
 
-# You should set up an HTTP connection in Airflow with the base URL
-# http://localhost:6800 in the Airflow UI.
-
 # Define the task dependencies
 http_sensor >> http_operator
-
-if __name__ == '__main__':
-    dag.cli()
