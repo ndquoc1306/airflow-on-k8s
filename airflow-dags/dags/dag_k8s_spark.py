@@ -6,17 +6,8 @@ from airflow import DAG
 from airflow.providers.cncf.kubernetes.operators.spark_kubernetes import SparkKubernetesOperator
 from airflow.providers.cncf.kubernetes.sensors.spark_kubernetes import SparkKubernetesSensor
 
-# [END import_module]
-
-
-# [START instantiate_dag]
-
-
-ENV_ID = os.environ.get("SYSTEM_TESTS_ENV_ID")
-DAG_ID = "spark_pi"
-
 with DAG(
-    DAG_ID,
+    'airflow-call-spark-on-k8s',
     default_args={"max_active_runs": 1},
     description="submit spark-pi as sparkApplication on kubernetes",
     schedule=timedelta(days=1),
@@ -25,17 +16,15 @@ with DAG(
 ) as dag:
     # [START SparkKubernetesOperator_DAG]
     t1 = SparkKubernetesOperator(
-        task_id="spark_pi_submit",
-        namespace="default",
+        task_id="spark_cf0001",
         application_file="config_spark.yaml",
         do_xcom_push=True,
         dag=dag,
     )
 
     t2 = SparkKubernetesSensor(
-        task_id="spark_pi_monitor",
-        namespace="default",
-        application_name="{{ task_instance.xcom_pull(task_ids='spark_pi_submit')['metadata']['name'] }}",
+        task_id="check_spark_app",
+        application_name="cf0001",
         dag=dag,
     )
     t1 >> t2
