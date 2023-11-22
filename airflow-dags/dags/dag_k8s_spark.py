@@ -19,6 +19,7 @@ with DAG(
         task_id="spark_cf0001",
         kubernetes_conn_id='k8s',
         application_file="config_spark.yaml",
+        namespace='spark-operator',
         do_xcom_push=True,
         dag=dag,
     )
@@ -27,6 +28,7 @@ with DAG(
         task_id="check_spark_app",
         kubernetes_conn_id='k8s',
         application_name="cf0001",
+        namespace='spark-operator',
         dag=dag,
     )
     t1 >> t2
