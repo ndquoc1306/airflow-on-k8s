@@ -17,6 +17,7 @@ with DAG(
     # [START SparkKubernetesOperator_DAG]
     t1 = SparkKubernetesOperator(
         task_id="spark_cf0001",
+        kubernetes_conn_id='k8s',
         application_file="config_spark.yaml",
         do_xcom_push=True,
         dag=dag,
@@ -24,6 +25,7 @@ with DAG(
 
     t2 = SparkKubernetesSensor(
         task_id="check_spark_app",
+        kubernetes_conn_id='k8s',
         application_name="cf0001",
         dag=dag,
     )
