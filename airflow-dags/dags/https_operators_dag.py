@@ -12,9 +12,9 @@ default_args = {
 
 # Define the DAG
 dag = DAG(
-    'my_http_request_dag',
+    dag_id='my_http_request_dag',
     default_args=default_args,
-    schedule_interval=None,  # Set your desired schedule interval
+    schedule_interval='@daily',  # Set your desired schedule interval
     catchup=False,
 )
 
